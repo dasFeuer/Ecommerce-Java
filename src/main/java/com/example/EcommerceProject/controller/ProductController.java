@@ -4,6 +4,7 @@ import com.example.EcommerceProject.model.Product;
 import com.example.EcommerceProject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,12 +38,26 @@ public class ProductController {
 
     @PostMapping("/product")
     public ResponseEntity<?> addProduct(@RequestPart Product product,
-                                        @RequestPart MultipartFile imageFile) {
-        try{
+                                        @RequestPart MultipartFile imageFile){
+        try {
+            System.out.println(product);
             Product product1 = service.addProduct(product, imageFile);
             return new ResponseEntity<>(product1, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/product/{productId}/image")
+    public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId) {
+
+        Product product = service.getProductById(productId);
+        byte[] imageFile = product.getImageDate();
+
+        return ResponseEntity.ok().
+                contentType(MediaType.valueOf(product.getImageType()))
+                .body(imageFile);
+
     }
 }

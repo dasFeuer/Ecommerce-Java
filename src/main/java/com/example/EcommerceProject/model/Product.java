@@ -1,6 +1,5 @@
 package com.example.EcommerceProject.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,4 +33,27 @@ public class Product {
     @Lob
     private byte[] imageDate;
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
+
+    public byte[] getImageDate() {
+        return imageDate;
+    }
+
+    public void setImageDate(byte[] imageDate) {
+        this.imageDate = imageDate;
+    }
 }
