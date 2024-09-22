@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @CrossOrigin
@@ -24,19 +23,19 @@ public class ProductController {
 
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<Product>> getAllProducts(){
         return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
     }
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable int id) {
+    public ResponseEntity<Product> getProduct(@PathVariable int id){
 
         Product product = service.getProductById(id);
-        if(product != null) {
+
+        if(product != null)
             return new ResponseEntity<>(product, HttpStatus.OK);
-        } else {
+        else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 
     @PostMapping("/product")
@@ -53,14 +52,15 @@ public class ProductController {
     }
 
     @GetMapping("/product/{productId}/image")
-    public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId) {
+    public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId){
 
         Product product = service.getProductById(productId);
         byte[] imageFile = product.getImageDate();
 
-        return ResponseEntity.ok().
-                contentType(MediaType.valueOf(product.getImageType()))
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(product.getImageType()))
                 .body(imageFile);
+
     }
 
     @PutMapping("/product/{id}")
@@ -70,16 +70,17 @@ public class ProductController {
         try {
             product1 = service.updateProduct(id, product, imageFile);
         } catch (IOException e) {
-            return new ResponseEntity<>("Failed to updated", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to update", HttpStatus.BAD_REQUEST);
         }
         if(product1 != null)
             return new ResponseEntity<>("Updated", HttpStatus.OK);
         else
-            return new ResponseEntity<>("Failed to updated", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to update", HttpStatus.BAD_REQUEST);
     }
 
+
     @DeleteMapping("/product/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable int id) {
+    public ResponseEntity<String> deleteProduct(@PathVariable int id){
         Product product = service.getProductById(id);
         if(product != null) {
             service.deleteProduct(id);
@@ -87,5 +88,15 @@ public class ProductController {
         }
         else
             return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+
     }
+
+    @GetMapping("/products/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword){
+        List<Product> products = service.searchProducts(keyword);
+        System.out.println("searching with " + keyword);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+
 }

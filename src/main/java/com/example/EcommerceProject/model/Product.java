@@ -22,14 +22,13 @@ public class Product {
     private String brand;
     private BigDecimal price;
     private String category;
+
     private Date releaseDate;
-    private boolean available;
-    private int quantity;
+    private boolean productAvailable;
+    private int stockQuantity;
 
     private String imageName;
     private String imageType;
-
-
     @Lob
     private byte[] imageDate;
 
